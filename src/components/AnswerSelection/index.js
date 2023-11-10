@@ -23,7 +23,13 @@ export default function AnswerSelection ({
   return (
     <div data-testid='answer-selection'>
       <h4>{question}</h4>
-      {options.map((option) => (<button data-testid='option' key={option} onClick={() => handleClick(option)}>{option}</button>))}
+      {options?.map((option) => (
+        <button
+          data-testid='option'
+          key={decodeURIComponent(option)}
+          onClick={() => handleClick(decodeURIComponent(option))}
+        >{decodeURIComponent(option)}
+        </button>))}
     </div>
   )
 }
