@@ -13,7 +13,6 @@ import ScoreProgressBar from '../ScoreProgressBar'
 export default function Quiz () {
   const {
     fetcNextQuestion,
-    isLoading,
     question,
     questionIndex,
     score,
@@ -22,28 +21,38 @@ export default function Quiz () {
   } = useQuiz()
   const [isSuccess, setIsSuccess] = useState(false)
   const [isQuestionResultVisible, setIsQuestionResultVisible] = useState(false)
+  const [answersSubmitted, setAnswersSubmitted] = useState(0)
+  const currentScore = answersSubmitted === 0 ? 0 : score * 100 / answersSubmitted
+  const maxScore = (totalQuestions - answersSubmitted + score) * 100 / totalQuestions
+  const minScore = score * 100 / totalQuestions
   return (
     <div data-testid='quiz'>
-      <ProgressBar value={questionIndex * 100 / totalQuestions} />
-      <div>
+      <ProgressBar value={(questionIndex + 1) * 100 / totalQuestions} />
+      <div className='container'>
         <QuestionHeader
           category={question.category}
-          currentQuestionIndex={questionIndex}
+          currentQuestionIndex={questionIndex + 1}
           difficulty={question.difficulty}
           totalQuestions={totalQuestions}
         />
         <AnswerSelection
+          key={decodeURIComponent(question.correct_answer)}
           answer={decodeURIComponent(question.correct_answer)}
           onSelect={(option) => {
             submitAnswer(option)
             setIsSuccess(option === decodeURIComponent(question.correct_answer))
             setIsQuestionResultVisible(true)
+            setAnswersSubmitted(prev => prev + 1)
           }}
-          options={question?.incorrect_answers?.concat(question.correct_answer)}
+          options={question.options}
           question={question.question}
         />
+        <div style={{
+          width: '100%',
+          height: '200px'
+        }}>
         {
-          isQuestionResultVisible &&
+          answersSubmitted < totalQuestions && isQuestionResultVisible &&
             <QuestionResult
               isSuccess={isSuccess} onNext={() => {
                 setIsSuccess(false)
@@ -52,11 +61,12 @@ export default function Quiz () {
               }}
             />
         }
+        </div>
 
         <ScoreProgressBar
-          current={score * 100 / questionIndex}
-          max={(totalQuestions - questionIndex + score) * 100 / totalQuestions}
-          min={score * 100 / totalQuestions}
+          current={currentScore.toFixed()}
+          max={maxScore.toFixed()}
+          min={minScore.toFixed()}
         />
       </div>
     </div>

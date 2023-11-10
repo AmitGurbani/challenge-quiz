@@ -22,14 +22,20 @@ export default function AnswerSelection ({
 
   return (
     <div data-testid='answer-selection'>
-      <h4>{question}</h4>
-      {options?.map((option) => (
-        <button
-          data-testid='option'
-          key={decodeURIComponent(option)}
-          onClick={() => handleClick(decodeURIComponent(option))}
-        >{decodeURIComponent(option)}
-        </button>))}
+      <h4>{decodeURIComponent(question)}</h4>
+      <div className='row text-center'>
+        {options?.map((option) => (
+          <div key={decodeURIComponent(option)} className='col-12 col-sm-6'>
+            <button
+              className='my-1 w-100'
+              data-testid='option'
+              onClick={() => handleClick(decodeURIComponent(option))}
+            >{decodeURIComponent(option)}
+            </button>
+          </div>
+        )
+        )}
+      </div>
     </div>
   )
 }

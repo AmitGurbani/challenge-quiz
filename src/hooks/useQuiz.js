@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
+import { shuffle } from '../utils'
 
 export default function useQuiz () {
   const [question, setQuestion] = useState({})
   const [totalQuestions, setTotalQuestions] = useState(1)
-  const [questionIndex, setQuestionIndex] = useState(0)
+  const [questionIndex, setQuestionIndex] = useState(-1)
   const [score, setScore] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -14,14 +15,17 @@ export default function useQuiz () {
   }
 
   const fetcNextQuestion = async () => {
-    setQuestionIndex(prev => prev + 1)
-    if (questionIndex <= totalQuestions) {
+    if (questionIndex < totalQuestions) {
       try {
         setIsLoading(true)
-        const response = await fetch(`http://localhost:3001/questions?_page=${questionIndex}_limit=1`)
-        setTotalQuestions(response.headers.get('X-Total-Count'))
+        const response = await fetch(`http://localhost:3001/questions?_page=${questionIndex + 2}&_limit=1`)
+        setTotalQuestions(Number(response.headers.get('X-Total-Count')))
         const questions = await response.json()
-        setQuestion(questions[0])
+        setQuestion({
+          ...questions[0],
+          options: shuffle(questions[0].incorrect_answers.concat(questions[0].correct_answer))
+        })
+        setQuestionIndex(prev => prev + 1)
       } catch (error) {
         console.log(error)
       } finally {

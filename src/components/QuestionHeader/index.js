@@ -13,7 +13,7 @@ export default function QuestionHeader ({
   return (
     <div data-testid='question-header'>
       <h3>Question {currentQuestionIndex} of {totalQuestions}</h3>
-      <p>{category}</p>
+      <p>{decodeURIComponent(category)}</p>
       <p>{difficulty}</p>
     </div>
   )

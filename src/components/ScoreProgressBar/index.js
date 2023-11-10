@@ -13,8 +13,8 @@ export default function ScoreProgressBar ({
   const maxProgressWidth = (max ?? 0) - (current ?? 0)
   return (
     <div data-testid='score-progress-bar'>
-      <div>
-        <span>Score: {current}%</span>
+      <div className='d-flex'>
+        <span className='mr-auto'>Score: {current}%</span>
         <span>Max Score: {max}%</span>
       </div>
       <div className='progress'>
