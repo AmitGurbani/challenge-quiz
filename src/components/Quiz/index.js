@@ -27,6 +27,8 @@ export default function Quiz () {
   const minScore = score * 100 / totalQuestions
   return (
     <div data-testid='quiz'>
+    {
+      question ? <>
       <ProgressBar value={(questionIndex + 1) * 100 / totalQuestions} />
       <div className='container'>
         <QuestionHeader
@@ -68,7 +70,10 @@ export default function Quiz () {
           max={maxScore.toFixed()}
           min={minScore.toFixed()}
         />
-      </div>
+      </div></> : <>
+        <p>Loading...</p>
+      </>
+    }
     </div>
   )
 }

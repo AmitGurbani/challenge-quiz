@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { shuffle } from '../utils'
 
 export default function useQuiz () {
-  const [question, setQuestion] = useState({})
+  const [question, setQuestion] = useState()
   const [totalQuestions, setTotalQuestions] = useState(1)
   const [questionIndex, setQuestionIndex] = useState(-1)
   const [score, setScore] = useState(0)
